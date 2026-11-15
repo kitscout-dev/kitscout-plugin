@@ -19,5 +19,8 @@
     "supply-chain"
   ],
   "icon": ".claude-plugin/icon.png",
-  "privacyPolicyUrl": "https://kitscout.dev/privacy"
+  "privacyPolicyUrl": "https://kitscout.dev/privacy",
+  "displayName": "KitScout",
+  "documentationUrl": "https://github.com/kitscout-dev/kitscout-plugin#readme",
+  "supportUrl": "https://github.com/kitscout-dev/kitscout-plugin/issues"
 }
