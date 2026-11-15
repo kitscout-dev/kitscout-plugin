@@ -1,39 +1,78 @@
-# KitScout plugin and skill
+# KitScout: check agent tools before you install them
 
-Stop installing abandoned, unofficial or dead agent tools. KitScout checks MCP servers, Agent Skills and Claude Code plugins against an index of ~88,000 tools (daily live checks, publisher identity, GitHub activity) and probes remote servers live.
+[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-dev.kitscout%2Fkitscout-17332D)](https://registry.modelcontextprotocol.io/v0/servers?search=dev.kitscout)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-E9B824)](#install)
+[![Agent Skill](https://img.shields.io/badge/Agent%20Skill-find--agent--tools-2F8A57)](plugins/kitscout/skills/find-agent-tools/SKILL.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-4D6A86)](LICENSE)
 
-What you get:
-- **`find-agent-tools` skill**: your agent splits a workflow into steps, finds candidates, and verifies each one before recommending it.
-- **KitScout MCP server** (`https://mcp.kitscout.dev/mcp`, free, no key): `check_tools`, `search_tools`, `get_tool`, `list_categories`.
+Your agent finds tools on the web. Some of them are deprecated, abandoned, unofficial copies, renamed or simply down. **KitScout checks every pick before it gets installed**, using an index of ~88,000 MCP servers, Agent Skills and Claude Code plugins (publisher identity, GitHub activity, a daily live check of every remote server) plus a live call at check time.
+
+![check_tools output: one tool to avoid, one caution with an official alternative, two ok](assets/check-tools-demo.png)
 
 ## Install
 
-**Claude Code plugin** (skill + MCP server):
+**Claude Code plugin** (skill + MCP server, recommended):
 ```
 /plugin marketplace add kitscout-dev/kitscout-plugin
 /plugin install kitscout@kitscout
 ```
+
+**MCP server only** (free, no API key, read-only): `https://mcp.kitscout.dev/mcp`
+
+| Client | How |
+|---|---|
+| Claude Code | `claude mcp add --transport http kitscout https://mcp.kitscout.dev/mcp` |
+| Claude app / claude.ai | Settings → Connectors → Add custom connector → `https://mcp.kitscout.dev/mcp` |
+| Cursor, VS Code, Codex, others | add a remote (Streamable HTTP) MCP server with that URL. Step-by-step: https://kitscout.dev/mcp |
 
 **Skill only** (any agent that supports Agent Skills):
 ```
 npx skills add kitscout-dev/kitscout-plugin --skill find-agent-tools
 ```
 
-**MCP server only**:
-```
-claude mcp add --transport http kitscout https://mcp.kitscout.dev/mcp
-```
+## Use it
 
-## Example
+Just ask your agent as usual:
 
 > "I want a Slack message whenever a Jira issue is closed. Which tools should I use?"
+>
+> "Is `@modelcontextprotocol/server-postgres` still OK to install?"
 
-The agent finds candidates per step, runs `check_tools` on them, and answers with a table: step, tool, verdict (`ok` / `caution` / `avoid`) with reasons, and the install line.
+With the plugin, the `find-agent-tools` skill splits the job into steps, finds 1-3 candidates per step, runs `check_tools` on all of them, and answers with a table: step → tool → verdict and why → install line.
 
-Why verify: in our test of 18 tools picked by plain web search, `check_tools` flagged the two weak picks (a 0-star repo untouched for 231 days, a 10-star scraper) and offered better-maintained alternatives, resolved three renamed repos, and left the 13 good picks alone.
+## What `check_tools` looks at
+
+Pass up to 5 GitHub URLs, npm/PyPI package ids, remote MCP URLs or names per call.
+
+| Check | Example result |
+|---|---|
+| Made by the product's own company? | `first_party`, or "not made by Atlassian" + the official server |
+| Deprecated, archived or renamed? | npm deprecation notice → `avoid`; renamed repo → new name |
+| Maintained? | days since last code change |
+| Adopted? | GitHub stars |
+| Does the remote server answer **right now**? | live call during the check (plus our daily check history) |
+| Where does your data go? | "local: runs on your machine" or "remote: data goes to mcp.example.com" |
+
+Verdict: **`ok`**, **`caution`** (low adoption, slow maintenance, unofficial) or **`avoid`** (deprecated, archived, down, abandoned), plus better or official alternatives that fit the same job.
+
+## Why verify
+
+We took 18 tools an agent picked by plain web search for real tasks and ran them through `check_tools`. It flagged both weak picks (a 0-star repo untouched for 231 days, a 10-star scraper) and offered better-maintained alternatives, resolved 3 renamed repos to their new names, and left the good picks alone: 2 picks improved, 16 unchanged, 0 false "avoid". In a second test on 8 multi-step workflows it caught an archived WordPress server that web search had recommended.
+
+## Other tools in the MCP server
+
+| Tool | What it does |
+|---|---|
+| `search_tools` | Ranked search across MCP servers, skills and plugins, with filters for verified publishers, live servers and servers that work without an API key. |
+| `get_tool` | Full details for one tool, including the actual tool list a remote server exposes and a ready-to-paste connect/install line. |
+| `list_categories` | All categories with tool counts. |
+
+You can also browse the whole index at **https://kitscout.dev**.
 
 ## Privacy
 
-The MCP server keeps an anonymous log of calls (time, country, client app name, the tools you searched or checked, and the results). No IPs, accounts or file contents. Policy: https://kitscout.dev/privacy
+The MCP server keeps an anonymous log of calls (time to the minute, country code, client app name, what you searched or checked, and the results) to learn which tools agents need. No IP addresses, accounts, headers or file contents. Policy: https://kitscout.dev/privacy
 
-Source of the server: https://github.com/kitscout-dev/kitscout-mcp · Contact: contact@kitscout.dev · License: MIT
+## Links
+
+Server source: [kitscout-dev/kitscout-mcp](https://github.com/kitscout-dev/kitscout-mcp) · Website: https://kitscout.dev · Wrong verdict or missing tool? [Open an issue](https://github.com/kitscout-dev/kitscout-plugin/issues) or email contact@kitscout.dev · License: MIT
