@@ -1,0 +1,10 @@
+{
+  "name": "kitscout",
+  "version": "1.0.0",
+  "description": "Verify agent tools before installing (maker, maintenance, adoption, live status) and find the right MCP server, skill or plugin for each step of a workflow.",
+  "author": { "name": "KitScout", "email": "contact@kitscout.dev", "url": "https://kitscout.dev" },
+  "homepage": "https://kitscout.dev",
+  "repository": "https://github.com/kitscout-dev/kitscout-plugin",
+  "license": "MIT",
+  "keywords": ["mcp", "agent-skills", "claude-code", "tool-discovery", "security", "supply-chain"]
+}

@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "kitscout": { "type": "http", "url": "https://mcp.kitscout.dev/mcp" }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "kitscout",
+  "owner": { "name": "KitScout", "email": "contact@kitscout.dev" },
+  "metadata": { "description": "KitScout: find and verify MCP servers, Agent Skills and Claude Code plugins before you install them." },
+  "plugins": [
+    {
+      "name": "kitscout",
+      "source": "./plugins/kitscout",
+      "description": "Verify agent tools before installing (maker, maintenance, adoption, live status) and find the right MCP server, skill or plugin for each step of a workflow.",
+      "version": "1.0.0",
+      "category": "development",
+      "homepage": "https://kitscout.dev"
+    }
+  ]
+}
