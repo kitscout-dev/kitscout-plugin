@@ -11,7 +11,7 @@
 
 ## Install
 
-**Claude Code plugin** (skill + MCP server, recommended):
+**Claude Code plugin** (skills + MCP server + stack guard, recommended):
 ```
 /plugin marketplace add kitscout-dev/kitscout-plugin
 /plugin install kitscout@kitscout
@@ -39,6 +39,18 @@ Just ask your agent as usual:
 > "Is `@modelcontextprotocol/server-postgres` still OK to install?"
 
 With the plugin, the `find-agent-tools` skill splits the job into steps, finds 1-3 candidates per step, runs `check_tools` on all of them, and answers with a table: step → tool → verdict and why → install line.
+
+## Stack guard: warned when an installed tool breaks (plugin 1.1+)
+
+Tools you already installed change under you: makers archive or deprecate them, stop maintaining them, remote servers go down, or a server quietly stops starting on your machine. With the plugin, KitScout checks **every MCP server and plugin installed in Claude Code** (not only ones KitScout found) and tells you at session start:
+
+> KitScout: 2 of your 6 agent tools need attention: old-postgres (fails to start on this machine), ...
+
+- **On your machine**: `claude mcp list` - does each server actually start here?
+- **From KitScout's daily data**: archived repo, npm deprecation, no code changes for a year or more, remote server down in our daily check.
+- Runs in the background at most once a day per project (the session-start hook itself returns instantly). Ask Claude *"KitScout stack report"* for details and replacements; it never installs or removes anything without your OK.
+- **Privacy**: only public ids leave your machine (npm/PyPI/Docker package names, server URLs without query strings or secret-looking path parts, plugin names). Never env vars, arguments, keys or files. Anonymous "did it start" sharing helps everyone see broken tools; it is **off** unless you ask Claude to turn it on.
+- Needs Node.js (most MCP setups already have it).
 
 ## What `check_tools` looks at
 
@@ -71,7 +83,7 @@ You can also browse the whole index at **https://kitscout.dev**.
 
 ## Privacy
 
-The MCP server keeps an anonymous log of calls (time to the minute, country code, client app name, what you searched or checked, and the results) to learn which tools agents need. No IP addresses, accounts, headers or file contents. Policy: https://kitscout.dev/privacy
+The MCP server keeps a log of calls (time to the minute, country code, client app name, what you searched or checked, and the results) to learn which tools agents need. The stack guard sends public tool ids only, logged the same way. No IP addresses, accounts, headers or file contents. Policy: https://kitscout.dev/privacy
 
 ## Links
 
