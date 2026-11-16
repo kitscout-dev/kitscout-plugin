@@ -13,7 +13,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 
-const VERSION = "1.1.0", API = "https://mcp.kitscout.dev", CLIENT = "kitscout-plugin/" + VERSION;
+const VERSION = "1.1.1", API = "https://mcp.kitscout.dev", CLIENT = "kitscout-plugin/" + VERSION;
 const DIR = path.join(os.homedir(), ".kitscout"), CONF = path.join(DIR, "config.json");
 // project-scoped MCP servers differ per project: one result file per project directory
 const PROJECT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
