@@ -38,7 +38,7 @@ Just ask your agent as usual:
 >
 > "Is `@modelcontextprotocol/server-postgres` still OK to install?"
 
-With the plugin, the `find-agent-tools` skill splits the job into steps, finds 1-3 candidates per step, runs `check_tools` on all of them, and answers with a table: step → tool → verdict and why → install line.
+With the plugin, the `find-agent-tools` skill first asks up to 3 short questions when a fact that changes the tool choice is missing (can you install software, where does it run, may the data leave your machine, do you code), then plans the workflow around your answers and runs `check_tools` on every MCP server, skill or plugin it recommends. It prefers a plain script, the product's own API or an established service when those fit better than an MCP server.
 
 ## Stack guard: warned when an installed tool breaks (plugin 1.1+)
 
