@@ -5,7 +5,7 @@
 [![Agent Skill](https://img.shields.io/badge/Agent%20Skill-find--agent--tools-2F8A57)](plugins/kitscout/skills/find-agent-tools/SKILL.md)
 [![License: MIT](https://img.shields.io/badge/license-MIT-4D6A86)](LICENSE)
 
-**The trust check between your agent and the tools it installs.** Your agent finds tools on the web. Some of them are deprecated, abandoned, unofficial copies, renamed or simply down. **KitScout checks every pick before it gets installed**, using an index of ~88,000 MCP servers, Agent Skills and Claude Code plugins (publisher identity, GitHub activity, a daily live check of every remote server) plus a live call at check time.
+**The trust check between your agent and the tools it installs.** Your agent finds tools on the web. Some of them are deprecated, abandoned, unofficial copies, renamed or simply down. **KitScout checks every pick before it gets installed**, using an index of ~90,000 MCP servers, Agent Skills and Claude Code plugins (publisher identity, GitHub activity, a daily live check of every remote server) plus a live call at check time.
 
 ![check_tools output: one tool to avoid, one caution with an official alternative, two ok](assets/check-tools-demo.png)
 
