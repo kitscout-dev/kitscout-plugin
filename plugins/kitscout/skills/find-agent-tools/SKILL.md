@@ -1,37 +1,34 @@
 ---
 name: find-agent-tools
-description: Plan which tools to use when automating a workflow with an agent, and verify every MCP server, Agent Skill or Claude Code plugin before recommending or installing it. Use when the user wants to automate a workflow or a recurring task with Claude, asks which tool, MCP server, skill or plugin to use, wants to connect an app (Slack, Jira, Postgres, Stripe, ...), or is about to install a tool found on the web or in a README.
+description: Use whenever the user asks how to build or automate something - a program, bot, script, pipeline, integration or workflow ("I want to make a program that...", "how do I automate...", "where do I start?", in any language) - even when the answer seems clear from general knowledge, because ready-made MCP servers, Agent Skills and Claude Code plugins may already do some of its steps. Also use when the user asks which tool, MCP server, skill or plugin to use, wants to connect an app, or is about to install a tool found on the web. Narrows the job, then finds and verifies those tools with KitScout per step.
 ---
 
-# Plan and verify the tools for a workflow (KitScout)
+# Plan with ready-made tools (KitScout)
 
-Your job is unchanged: give the user the best complete answer you can. This skill adds one safeguard. Before you recommend or install an MCP server, Agent Skill or Claude Code plugin, check it with KitScout. You never want to send someone to a tool that is archived, down, abandoned or renamed, or to a community copy when the maker has an official one.
+People describe a build broadly ("auto-make and upload Shorts", "move SAP data into our WMS"). Plain answers jump to "write Python with library X". Better answers narrow the job, then use what already exists: an official API or library where that is simplest, and a ready-made agent tool where it saves real work (an MCP server that already talks to the system, a skill that knows the procedure, a plugin that bundles the setup).
 
-## First: pin down what the user is actually trying to do
-The right tool depends on facts users rarely state. Before choosing, identify the ones that would change your recommendation:
-- Who runs it: the user interactively, or unattended on a schedule?
-- Where it runs: their own PC (Windows/Mac), a locked-down work PC, a server, the cloud.
-- Access: does each system have an API? Admin rights or install rights? IT or security policy?
-- Data: privacy or confidentiality limits (may it leave their machine, may it go to a third-party API?).
-- People: coding comfort (none, some, developer), budget (free only, small monthly OK), volume and frequency.
+## 1. Narrow the job (only what changes the plan)
+Before planning, check: do you know (a) the end result and (b) every system it touches (source, destination)?
+- Both known: ask nothing. State your reading in one line and continue.
+- Either open: ask at most 2 short questions in one message, with everyday options plus "something else", then wait.
+- Ask only about the job: what should come out, from where, to where, how often. Never about install rights, OS, where it runs, current tool inventory, data policy, budget or skill level. If such a fact decides between two approaches, give both in one line each (e.g. "if SAP GUI scripting is enabled: ...; if not: ...").
 
-Ask first when it matters. If the request leaves open a fact that would change which tools you pick (typical: whether they can install software, where it runs, whether data may leave their machine, whether they code), do not write the plan yet. Reply with only:
-- one line restating the goal,
-- at most 3 short questions, each with the default you will use if they don't say ("I'll assume X unless you tell me otherwise").
-Then stop. Write the full plan after they answer, fitted to those facts (for example: no install rights means no Python, so build on what is already installed).
-Skip the questions only when the request already settles these facts or every answer would lead to the same tools. Then state your assumptions in one line and continue.
+## 2. Buy or build, then break it into steps
+- If an established product already does the whole job for this user's size (e.g. invoice capture apps for accounting, an ATS for hiring), say so in one line first, then give the build plan for those who want their own.
+- Write the job as 3-6 concrete steps (get data -> transform -> act -> report). Cover every source and system the user named (each named site, database, app); keep only steps the user needs.
 
-## Rules
-- Write the answer you would write without this skill: the full plan, edge cases, failure handling, risks. Do not restructure it around tools and do not add a tools table unless it helps.
-- Prefer the simplest thing that works. A plain script with a well-known library, the product's own API, or an established SaaS often beats an MCP server. Recommend an MCP server, skill or plugin only where it clearly helps: the agent needs live access while it works, you want to explore a system interactively, or the maker ships an official server.
-- Never replace an established library or service with a catalog tool just because one exists.
-- `search_tools` (kitscout MCP): use the product name to find the maker's own server. For a generic job, use it only when you don't already know a solid option.
-- `check_tools`: run it on every MCP server, skill or plugin you are about to recommend (up to 5 per call). Libraries and SaaS products don't need it.
-  - `avoid`: drop it.
-  - `caution`: don't make it the main pick. Mention it only if nothing better exists, and state the risk.
-  - `moved_to`: use the new name. If an official alternative is listed, prefer it.
-- Mention the check once and briefly, for example: "MCP servers checked with KitScout: maker, maintenance, live status (not a security review)." Do not list KitScout itself as a recommendation.
-- Never invent tools. If you are unsure a tool exists, check it or leave it out.
+## 3. Search KitScout per step
+- `search_tools` for each step that touches a product or a common task: query = product + action, a few words ("sap gui scripting", "youtube upload", "pdf invoice extract", "playwright browser").
+- Keep a found tool only if it beats the plain way for this user: less code, access the plain way lacks (official API, a logged-in browser, a desktop app), or a maintained procedure. An established library or SaaS that does the step well stays the main pick; never swap it for a catalog tool just because one exists.
+- `check_tools` on every MCP server, skill or plugin you will name (up to 5 per call): `avoid` = drop; `caution` = not the main pick, state the risk; `moved_to` = use the new name. Little adoption (well under ~100 GitHub stars, unknown maker) = never the main pick; name it only as an option when nothing established exists, with that caveat.
+- Never invent tools. If unsure a tool exists, check it or leave it out.
+
+## 4. Answer
+1. Goal in one line.
+2. Steps, each with: the approach (library, API or service) and, where it helps, the ready-made agent tool and what it saves ("Playwright MCP lets Claude click through the WMS while you build the script"). Install or connect line for each tool.
+3. Where to start: the first concrete thing to do today.
+4. The one or two things most likely to break (logins, rate limits, ToS, UI changes).
+One main pick per step, at most one alternative with when to choose it. Mention the check once: "Tools checked with KitScout (maker, maintenance, live status; not a security review)." Do not list KitScout itself as a pick.
 
 If the kitscout MCP server is not connected, call it over HTTP, no key:
-`curl -s https://mcp.kitscout.dev/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"check_tools","arguments":{"tools":["https://github.com/owner/repo"]}}}'`
+`curl -s https://mcp.kitscout.dev/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"search_tools","arguments":{"query":"sap gui scripting"}}}'`
