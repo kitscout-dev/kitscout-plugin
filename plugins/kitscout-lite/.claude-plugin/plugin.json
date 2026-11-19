@@ -1,6 +1,6 @@
 {
   "name": "kitscout",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "Find the right MCP server, skill or plugin for each step of a workflow, verify agent tools before installing them (maker, maintenance, live status, alternatives), and check your installed tools on request.",
   "author": {
     "name": "KitScout",

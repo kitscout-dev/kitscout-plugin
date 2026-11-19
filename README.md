@@ -34,6 +34,8 @@ npx skills add kitscout-dev/kitscout-plugin --skill find-agent-tools
 
 Just ask your agent as usual:
 
+> "I want to build a program that makes YouTube Shorts and uploads them automatically. Where do I start?" (the skill splits the plan into steps and adds the ready-made tools that already do some of them)
+>
 > "I want a Slack message whenever a Jira issue is closed. Which tools should I use?"
 >
 > "Is `@modelcontextprotocol/server-postgres` still OK to install?"
