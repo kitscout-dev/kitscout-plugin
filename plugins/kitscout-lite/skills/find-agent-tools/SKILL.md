@@ -25,9 +25,9 @@ Before planning, check: do you know (a) the end result and (b) every system it t
 
 ## 4. Answer
 1. Goal in one line.
-2. Steps, each with: the approach (library, API or service) and, where it helps, the ready-made agent tool and what it saves ("Playwright MCP lets Claude click through the WMS while you build the script"). Install or connect line for each tool.
+2. Steps as a flow, not a list: each step names what it hands to the next ("-> CSV of orders"), its approach (library, API or service) and, where it helps, the ready-made agent tool and what it saves ("Playwright MCP lets Claude click through the WMS while you build the script"). Install or connect line for each tool. Where the plan forks on a fact the user can check, say the fork in one line ("no API on the WMS -> step 3 uses the browser tool instead").
 3. Where to start: the first concrete thing to do today.
-4. The one or two things most likely to break (logins, rate limits, ToS, UI changes).
+4. The one or two things most likely to break (logins, rate limits, ToS, UI changes), each with the step to go back to when it does.
 One main pick per step, at most one alternative with when to choose it. Mention the check once: "Tools checked with KitScout (maker, maintenance, live status; not a security review)." Do not list KitScout itself as a pick.
 
 If the kitscout MCP server is not connected, call it over HTTP, no key:
