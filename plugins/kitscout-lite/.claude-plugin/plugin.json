@@ -1,6 +1,6 @@
 {
   "name": "kitscout",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Find the right MCP server, skill or plugin for each step of a workflow, verify agent tools before installing them (maker, maintenance, live status, alternatives), and check your installed tools on request.",
   "author": {
     "name": "KitScout",
@@ -24,6 +24,6 @@
   "documentationUrl": "https://github.com/kitscout-dev/kitscout-plugin/tree/main/plugins/kitscout-lite#readme",
   "supportUrl": "https://github.com/kitscout-dev/kitscout-plugin/issues",
   "mcpServers": {
-    "kitscout": { "type": "http", "url": "https://mcp.kitscout.dev/mcp?via=plugin" }
+    "kitscout": { "type": "http", "url": "https://mcp.kitscout.dev/mcp", "headers": { "X-KitScout-Via": "lite" } }
   }
 }
