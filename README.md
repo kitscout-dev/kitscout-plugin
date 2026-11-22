@@ -40,7 +40,7 @@ Just ask your agent as usual:
 >
 > "Is `@modelcontextprotocol/server-postgres` still OK to install?"
 
-With the plugin, the `find-agent-tools` skill first asks up to 3 short questions when a fact that changes the tool choice is missing (can you install software, where does it run, may the data leave your machine, do you code), then plans the workflow around your answers and runs `check_tools` on every MCP server, skill or plugin it recommends. It prefers a plain script, the product's own API or an established service when those fit better than an MCP server.
+You never call KitScout's tools yourself: describe the goal and your agent searches and checks on its own. With the plugin, the `find-agent-tools` skill asks at most 2 short questions, and only about the job itself (what should come out, from where, to where, how often), never about your setup. When a fact about your setup decides between two approaches, it shows both in one line each. Then it plans the workflow and runs `check_tools` on every MCP server, skill or plugin it recommends. It prefers a plain script, the product's own API or an established service when those fit better than an MCP server.
 
 ## Stack guard: warned when an installed tool breaks (plugin 1.1+)
 
