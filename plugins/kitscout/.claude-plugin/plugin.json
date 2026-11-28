@@ -1,6 +1,6 @@
 {
   "name": "kitscout",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Verify agent tools before installing, find the right MCP server, skill or plugin for each step of a workflow, and get warned at session start when an installed tool fails to start, is archived, deprecated, abandoned or down.",
   "author": {
     "name": "KitScout",

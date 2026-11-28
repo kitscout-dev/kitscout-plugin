@@ -7,6 +7,9 @@ description: Use whenever the user asks how to build or automate something - a p
 
 People describe a build broadly ("auto-make and upload Shorts", "move SAP data into our WMS"). Plain answers jump to "write Python with library X". Better answers narrow the job, then use what already exists: an official API or library where that is simplest, and a ready-made agent tool where it saves real work (an MCP server that already talks to the system, a skill that knows the procedure, a plugin that bundles the setup).
 
+## 0. One tool or one pick? Answer short
+If the user only asks whether a named tool is OK to install, or which tool to use for one product or task, there is no build to plan: skip steps 1, 2 and the step plan in 4. Run `check_tools` on the named tools (or `search_tools`, then `check_tools` on the top 2-3) and answer in a few lines: the verdict and its reason for each, the official or better-maintained alternative if there is one, and the install line (rule in step 3).
+
 ## 1. Narrow the job (only what changes the plan)
 Before planning, check: do you know (a) the end result and (b) every system it touches (source, destination)?
 - Both known: ask nothing. State your reading in one line and continue.
@@ -22,13 +25,14 @@ Before planning, check: do you know (a) the end result and (b) every system it t
 - Keep a found tool only if it beats the plain way for this user: less code, access the plain way lacks (official API, a logged-in browser, a desktop app), or a maintained procedure. An established library or SaaS that does the step well stays the main pick; never swap it for a catalog tool just because one exists.
 - `check_tools` on every MCP server, skill or plugin you will name (up to 5 per call): `avoid` = drop; `caution` = not the main pick, state the risk; `moved_to` = use the new name. Little adoption (well under ~100 GitHub stars, unknown maker) = never the main pick; name it only as an option when nothing established exists, with that caveat.
 - Never invent tools. If unsure a tool exists, check it or leave it out.
+- Install lines: copy the `install` value KitScout returned (`get_tool` when search_tools gave none). When it is null, link the tool's repo and say to follow its README; never write an install command from memory.
 
 ## 4. Answer
 1. Goal in one line.
 2. Steps as a flow, not a list: each step names what it hands to the next ("-> CSV of orders"), its approach (library, API or service) and, where it helps, the ready-made agent tool and what it saves ("Playwright MCP lets Claude click through the WMS while you build the script"). Install or connect line for each tool. Where the plan forks on a fact the user can check, say the fork in one line ("no API on the WMS -> step 3 uses the browser tool instead").
 3. Where to start: the first concrete thing to do today.
 4. The one or two things most likely to break (logins, rate limits, ToS, UI changes), each with the step to go back to when it does.
-5. When the plan picks 2 or more agent tools, end with one copyable "Set it all up" block for the user's client: Claude Code = one line per tool (`claude mcp add --transport http <name> <url>`, `claude mcp add <name> -- npx -y <package>`, `claude plugin install <plugin>@<marketplace>`, `npx skills add <owner/repo> --skill <name>`); other clients = one `mcpServers` JSON snippet. Only tools that passed `check_tools`; no secrets in it (write `<YOUR_KEY>` where a key is needed). Under the block, one line with the context cost: add up the `context_tokens` that search_tools returned for the picked tools ("Always-on context: about 2,300 tokens per conversation"); if one pick costs far more than an equal alternative, say so in that step.
+5. When the plan picks 2 or more agent tools, end with one copyable "Set it all up" block for the user's client: Claude Code = one line per tool (`claude mcp add --transport http <name> <url>`, `claude mcp add <name> -- npx -y <package>`, `claude plugin install <plugin>@<marketplace>`, preceded by `claude plugin marketplace add <owner/repo>` when the marketplace is not the official one, `npx skills add <owner/repo> --skill <name>`); other clients = one `mcpServers` JSON snippet. Only tools that passed `check_tools` and have an install line from KitScout (the others stay as repo links in their step); no secrets in it (write `<YOUR_KEY>` where a key is needed). Under the block, one line with the context cost: add up the `context_tokens` that search_tools returned for the picked tools ("Always-on context: about 2,300 tokens per conversation"). Many results, most MCP servers among them, carry no `context_tokens`: name those picks as not measured and never present a partial sum as the total. If one pick costs far more than an equal alternative, say so in that step.
 One main pick per step, at most one alternative with when to choose it. Mention the check once: "Tools checked with KitScout (maker, maintenance, live status; not a security review)." Do not list KitScout itself as a pick.
 
 If the kitscout MCP server is not connected, call it over HTTP, no key:
